@@ -31,8 +31,8 @@ const server = express()
 // }
 // server.use(cors(corsOptions))
 
-// Leer datos de formularios
-// server.use(express.json())
+// Leer datos de formularios de tipo JSON en el servidor
+server.use(express.json())
 
 // MORGAN
 // server.use(morgan('dev'))
