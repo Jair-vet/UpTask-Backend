@@ -1,6 +1,7 @@
 import express  from 'express'
 import dotenv from 'dotenv'
 import { connectDB } from './config/db'
+import router from './routes/projectRoutes'
 // import router from './router'
 // import db from './config/db'
 // import swaggerUi from 'swagger-ui-express'
@@ -36,7 +37,8 @@ const server = express()
 // MORGAN
 // server.use(morgan('dev'))
 
-// server.use('/api/products', router)
+// Instanciar las rutas
+server.use('/api/projects', router)
 
 
 // Docs
