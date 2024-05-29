@@ -52,6 +52,7 @@ router.delete('/:id',
 
 
 /*  Routes for task  */
+// ! CREAR
 router.post('/:projectId/tasks',
     validateProjectExists,
     body('projectName')
@@ -62,5 +63,9 @@ router.post('/:projectId/tasks',
     TaskController.createTask
 )
 
+router.get('/:projectId/tasks',
+    validateProjectExists,
+    TaskController.getProjectTask
+)
 
 export default router
