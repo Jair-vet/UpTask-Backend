@@ -17,7 +17,9 @@ export class TaskController {
         try {
             const task = new Task(req.body)
             task.project = project.id   // Asignamos el Proyecto al que pertenece la tarea
+            project.tasks.push(task.id)
             await task.save()
+            await project.save()
             res.send('Tarea creada Correctamente')
         } catch (error) {
             console.log(error);
