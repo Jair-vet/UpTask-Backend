@@ -24,7 +24,7 @@ export class TaskController {
     static getProjectTask = async (req: Request, res: Response) => {
 
         try {
-            const tasks = await Task.find({project: req.project.id})
+            const tasks = await Task.find({project: req.project.id}).populate('project')
             res.json({data: tasks})
         } catch (error) {
             res.status(500).json({error: 'Hubo un error'})
