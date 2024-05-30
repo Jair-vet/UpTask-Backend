@@ -70,7 +70,7 @@ router.get('/:projectId/tasks',
 )
 
 router.param('taskId', taskExists)
-// router.param('taskId', taskBelongsToProject)
+router.param('taskId', taskBelongsToProject)
 
 // ! OBTENER ID - task
 router.get('/:projectId/tasks/:taskId',
