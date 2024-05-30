@@ -1,9 +1,9 @@
 import type { Request, Response } from "express"
-import Project from "../models/Project";
 import Task from "../models/Task";
 
 
 export class TaskController {
+    // ! CREATE
     static createTask = async (req: Request, res: Response) => {
 
         try {
@@ -20,7 +20,7 @@ export class TaskController {
             res.status(500).json({error: 'Hubo un error'})
         }
     }
-
+    // ! GET ALL
     static getProjectTask = async (req: Request, res: Response) => {
 
         try {
@@ -30,43 +30,57 @@ export class TaskController {
             res.status(500).json({error: 'Hubo un error'})
         }
     }
-
+    // ! GET BY ID
     static getTaskById = async (req: Request, res: Response) => {
 
         try {
-            const { taskId } = req.params
-            const task = await Task.findById(taskId)
-            if(!task){
-                const error = new Error('Tarea no encontrada')
-                return res.status(404).json({error: error.message})
-            }
             // Si no pertenece al Proyecto
-            if(task.project.toString() !== req.project.id){
+            if(req.task.project.toString() !== req.project.id){
                 const error = new Error('Accion no Valida')
                 return res.status(400).json({error: error.message})
             }
 
-            res.json(task)
+            res.json(req.task)
         } catch (error) {
             res.status(500).json({error: 'Hubo un error'})
         }
     }
+    // ! UPDATE
     static updateTask = async (req: Request, res: Response) => {
 
         try {
-            const { taskId } = req.params
-            const task = await Task.findByIdAndUpdate(taskId, req.body) // Actualizar Id, Middleware
-            if(!task){
-                const error = new Error('Tarea no encontrada')
-                return res.status(404).json({error: error.message})
-            }
             // Si no pertenece al Proyecto
-            if(task.project.toString() !== req.project.id){
+            if(req.task.project.toString() !== req.project.id){
                 const error = new Error('Accion no Valida')
                 return res.status(400).json({error: error.message})
             }
-
+            req.task.name = req.body.name
+            req.task.description = req.body.description
+            await req.task.save()
             res.send("Tarea Actualizada Correctamente")
+        } catch (error) {
+            res.status(500).json({error: 'Hubo un error'})
+        }
+    }
+    // ! DELETE
+    static deleteTask = async (req: Request, res: Response) => {
+        try {
+            req.project.tasks = req.project.tasks.filter( task => task.toString() !== req.task.id.toString() )
+            await Promise.allSettled([ req.task.deleteOne(), req.project.save() ])
+            res.send("Tarea Eliminada Correctamente")
+
+        } catch (error) {
+            res.status(500).json({error: 'Hubo un error'})
+        }
+    }
+    // ! CHANGE STATUS
+    static updateStatus = async (req: Request, res: Response) => {
+        try {
+            const { status } = req.body
+            req.task.status = status
+            
+            await req.task.save()
+            res.send('Tarea Actualizada')
         } catch (error) {
             res.status(500).json({error: 'Hubo un error'})
         }
