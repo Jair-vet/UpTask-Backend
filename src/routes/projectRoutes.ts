@@ -5,8 +5,10 @@ import { handleInputErrors } from '../middleware/validation';
 import { TaskController } from '../controllers/TaskContoller';
 import { ProjectExists } from '../middleware/project';
 import { taskBelongsToProject, taskExists } from '../middleware/task';
+import { NoteController } from '../controllers/NoteController';
 
 const router = Router()
+// ? ---- Routes for projects ----
 // ! CREAR
 router.post('/',
     body('projectName')
@@ -52,7 +54,7 @@ router.delete('/:id',
 )
 
 
-/*  Routes for task  */
+// ?  ---- Routes for task ----  
 router.param('projectId', ProjectExists)
 
 // ! CREAR - task
@@ -102,5 +104,25 @@ router.post('/:projectId/tasks/:taskId/status',
     handleInputErrors,
     TaskController.updateStatus
 )
+
+
+// ? ---- Routes for Notes ----
+router.post('/:projectId/tasks/:taskId/notes',
+    body('content')
+        .notEmpty().withMessage('El Contenido de la nota es obligatorio'),
+    handleInputErrors,
+    NoteController.createNote
+)
+
+router.get('/:projectId/tasks/:taskId/notes',
+    NoteController.getTaskNotes
+)
+
+router.delete('/:projectId/tasks/:taskId/notes/:noteId',
+    param('noteId').isMongoId().withMessage('ID No Válido'),
+    handleInputErrors,
+    NoteController.deleteNote
+)
+
 
 export default router
