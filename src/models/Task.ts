@@ -17,6 +17,7 @@ export interface ITask extends Document {
     description: string
     project: Types.ObjectId
     status: TaskStatus
+    notes: Types.ObjectId[]
 }
 
 // Mongoose
@@ -40,6 +41,12 @@ const TaskSchema: Schema = new Schema({
         enum: Object.values(taskStatus),
         default: taskStatus.PENDING
     },
+    notes: [
+        {
+            type: Types.ObjectId,
+            ref: 'Note'
+        }
+    ]
 }, {timestamps: true})
 
 const Task = mongoose.model<ITask>('Task', TaskSchema)
