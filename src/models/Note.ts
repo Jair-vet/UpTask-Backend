@@ -2,7 +2,7 @@ import mongoose, { Schema, Document, Types } from 'mongoose'
 
 export interface INote extends Document {
     content: string
-    createdBy: Types.ObjectId
+    // createdBy: Types.ObjectId
     task: Types.ObjectId
 }
 
@@ -11,11 +11,11 @@ const NoteSchema: Schema = new Schema({
         type: String,
         required: true
     },
-    createdBy: {
-        type: Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
+    // createdBy: {
+    //     type: Types.ObjectId,
+    //     ref: 'User',
+    //     required: true
+    // },
     task: {
         type: Types.ObjectId,
         ref: 'Task',
